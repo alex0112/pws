@@ -102,3 +102,23 @@ Feature: Generate
     And the output should contain "The password for github has been added"
     And  the output should contain "The password for github has been copied to your clipboard"
     And  the clipboard should match [^ABC123]{64}
+
+  Scenario: Generate a new password for "github", using only alphanumeric characters
+    Given A safe exists with master password "my_master_password"
+    When I run `pws generate github 0 --alphanumeric` interactively
+    And I type "my_master_password"
+    Then the output should contain "Master password:"
+    And the output should contain "The password for github has been added"
+    And  the output should contain "The password for github has been copied to your clipboard"
+    And  the clipboard should match ^[0-9a-zA-Z]{64}$
+
+  Scenario: Generate a new password for "github", using only alphanumeric and no special characters
+    Given A safe exists with master password "my_master_password"
+    When I run `pws generate github 0 --basic` interactively
+    And I type "my_master_password"
+    Then the output should contain "Master password:"
+    And the output should contain "The password for github has been added"
+    And  the output should contain "The password for github has been copied to your clipboard"
+    And  the clipboard should match ^[0-9a-zA-Z!@#$%^&*()]{64}$
+
+
